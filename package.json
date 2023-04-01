@@ -1,7 +1,7 @@
 {
   "name": "hardhat-project",
   "scripts": {
-    "text": "npx hardhat test"
+    "test": "npx hardhat test"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.8.2"

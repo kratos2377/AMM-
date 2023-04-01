@@ -17,20 +17,20 @@ contract Pool {
             slope = _slope;
      }
 
-       function sell(uint tokens) public returns (uint256) {
-            
+       function sell(uint tokens) public {
+              require(balances[msg.sender] >= tokens);
               totalSupply = totalSupply.sub(tokens);
               uint256 balance = balances[msg.sender];
               balances[msg.sender] = balance.sub(tokens);
 
               uint256 ethReturn = calculateSellReturn(tokens);
 
+              require(ethReturn <= address(this).balance, "not enough money in contract"); 
               payable(msg.sender).transfer(ethReturn);
-
 
        }
        function buy() public payable {
-              require(msg.value > 0);
+              require(msg.value > 0, "some eth is required");
 
 
               uint256  tokensToMint = calculateBuyReturn(msg.value);
@@ -42,21 +42,20 @@ contract Pool {
 
        function calculateSellReturn(uint256 tokens) public view returns (uint256)  {
                      uint256 currentPrice = calculateTokenPrice();
-                     return tokems.mul(currentPrice);
+                     return tokens.mul(currentPrice);
        }
        function calculateBuyReturn(uint depositAmount) public view returns (uint256) {
               uint256 currentPrice = calculateTokenPrice();
 
-              return depositAmount/currentPrice;
+              return depositAmount.div(currentPrice);
        }
 
-function calculateTokenPrice() public view returns (uint256) {
-       uint256 temp = totalSupply.mul(totalSupply);
-       return slope.mul(temp);
-}
+       function calculateTokenPrice() public view returns (uint256) {
+              uint256 temp = totalSupply.mul(totalSupply);
+              return slope.mul(temp);
+       }
 
-function calculatePurchase() public view returns (uint256) {
+       function recieve() external payable {
 
-}
-
+       }
 }
