@@ -16,4 +16,47 @@ contract Pool {
             totalSupply = initialSupply;
             slope = _slope;
      }
+
+       function sell(uint tokens) public returns (uint256) {
+            
+              totalSupply = totalSupply.sub(tokens);
+              uint256 balance = balances[msg.sender];
+              balances[msg.sender] = balance.sub(tokens);
+
+              uint256 ethReturn = calculateSellReturn(tokens);
+
+              payable(msg.sender).transfer(ethReturn);
+
+
+       }
+       function buy() public payable {
+              require(msg.value > 0);
+
+
+              uint256  tokensToMint = calculateBuyReturn(msg.value);
+              totalSupply = totalSupply.add(tokensToMint);
+              uint256 currentBalance = balances[msg.sender];
+
+              balances[msg.sender] = currentBalance.add(tokensToMint);
+       }
+
+       function calculateSellReturn(uint256 tokens) public view returns (uint256)  {
+                     uint256 currentPrice = calculateTokenPrice();
+                     return tokems.mul(currentPrice);
+       }
+       function calculateBuyReturn(uint depositAmount) public view returns (uint256) {
+              uint256 currentPrice = calculateTokenPrice();
+
+              return depositAmount/currentPrice;
+       }
+
+function calculateTokenPrice() public view returns (uint256) {
+       uint256 temp = totalSupply.mul(totalSupply);
+       return slope.mul(temp);
+}
+
+function calculatePurchase() public view returns (uint256) {
+
+}
+
 }
