@@ -26,7 +26,7 @@ describe("Lock", function () {
 
             const newTokenPrice = await pool.calculateTokenPrice();
             console.log(newTokenPrice)
-            const balance = await pool.balances(owner.address)
+            const balance = await pool.balanceOf(owner.address)
             console.log("Current token balance is: " , balance)
 
 
@@ -35,7 +35,7 @@ describe("Lock", function () {
             const priceAfterSell = await pool.calculateTokenPrice();
             console.log(priceAfterSell)
 
-            const newBalance = await pool.balances(owner.address);
+            const newBalance = await pool.balanceOf(owner.address);
             console.log(newBalance)
         })
 });
